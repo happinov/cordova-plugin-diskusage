@@ -1,0 +1,22 @@
+{
+  "name": "cordova-plugin-diskusage",
+  "version": "1.0.0",
+  "description": "Read disk usage of your device.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/happinov/cordova-plugin-diskusage.git"
+  },
+  "keywords": [
+    "cordova",
+    "plugin",
+    "disk",
+    "storage",
+    "usage"
+  ],
+  "author": "Happinov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/happinov/cordova-plugin-diskusage/issues"
+  },
+  "homepage": "https://github.com/happinov/cordova-plugin-diskusage#readme"
+}
