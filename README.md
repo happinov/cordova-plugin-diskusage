@@ -5,6 +5,8 @@ This plugin allows you to get total and free disk space on your device.
 
 On Android it only supports internal storage for now.
 
+*Note:* Minimum andoid SDK is 18.
+
 ## Usage
 
 ```
