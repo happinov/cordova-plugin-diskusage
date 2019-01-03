@@ -21,5 +21,8 @@ This code is released under the [MIT license](LICENSE).
 
 ## Changelog
 
+## 2.0.0
+  * Updated code for swift 4.2.
+
 ## 1.0.0
   * Initial release supporting both iOS and Android.
