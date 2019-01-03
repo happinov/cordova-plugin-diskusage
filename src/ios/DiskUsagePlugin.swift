@@ -15,7 +15,7 @@
         return (free: freeSize.int64Value, total: totalSize.int64Value)
     }
     
-	func read(_ command: CDVInvokedUrlCommand) {
+	@objc func read(_ command: CDVInvokedUrlCommand) {
         if let diskSize = getRemainingFreeSpace() {
             let message = [
                 "internal": [
