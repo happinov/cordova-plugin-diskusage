@@ -1,35 +1,37 @@
 
 @objc(DiskUsagePlugin) class DiskUsagePlugin:CDVPlugin {
-    func getRemainingFreeSpace() -> (free: Int64, total: Int64)? {
-        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
-        
-        guard
-            let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: documentDirectory),
-            let freeSize = systemAttributes[.systemFreeSize] as? NSNumber,
-            let totalSize = systemAttributes[.systemSize] as? NSNumber
-        else {
-            // Something failed.
-            return nil
-        }
-        
-        return (free: freeSize.int64Value, total: totalSize.int64Value)
+    var totalDiskSpaceInBytes:Int64 {
+        guard let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String),
+            let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.int64Value else { return 0 }
+        return space
     }
-    
-	@objc func read(_ command: CDVInvokedUrlCommand) {
-        if let diskSize = getRemainingFreeSpace() {
-            let message = [
-                "internal": [
-                    "free": diskSize.free,
-                    "total": diskSize.total
-                ]
-            ]
-            
-            let result = CDVPluginResult(status:CDVCommandStatus_OK, messageAs:message)
-            commandDelegate.send(result,callbackId:command.callbackId)
+
+    var freeDiskSpaceInBytes:Int64 {
+        if #available(iOS 11.0, *) {
+            if let space = try? URL(fileURLWithPath: NSHomeDirectory() as String).resourceValues(forKeys: [URLResourceKey.volumeAvailableCapacityForImportantUsageKey]).volumeAvailableCapacityForImportantUsage {
+                return space
+            } else {
+                return 0
+            }
         } else {
-            // Error reading disk status.
-            let result = CDVPluginResult(status:CDVCommandStatus_ERROR, messageAs:"Error reading disk usage.")
-            commandDelegate.send(result,callbackId:command.callbackId)
+            if let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String),
+            let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.int64Value {
+                return freeSpace
+            } else {
+                return 0
+            }
         }
+    }
+
+	@objc func read(_ command: CDVInvokedUrlCommand) {
+        let message = [
+            "internal": [
+                "free": freeDiskSpaceInBytes,
+                "total": totalDiskSpaceInBytes
+            ]
+        ]
+
+        let result = CDVPluginResult(status:CDVCommandStatus_OK, messageAs:message)
+        commandDelegate.send(result,callbackId:command.callbackId)
 	}
 }
