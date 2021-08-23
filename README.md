@@ -21,6 +21,12 @@ This code is released under the [MIT license](LICENSE).
 
 ## Changelog
 
+## 2.1.1
+  * Fixed values returned on ios.
+
+## 2.1.0
+  * Removed add-swift-support plugin dependency.
+
 ## 2.0.0
   * Updated code for swift 4.2.
 
